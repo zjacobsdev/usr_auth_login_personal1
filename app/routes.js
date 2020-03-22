@@ -42,7 +42,7 @@ module.exports = function(app, passport, db) {
 // message board routes ===============================================================
 
     app.post('/list', (req, res) => {
-      db.collection('bill_info').save({name:req.user.local.email,company: req.body.company, date: req.body.date, amt: req.body.amt}, (err, result) => {
+      db.collection('bill_info').save({name:req.user.local.email,company: req.body.company, date: req.body.date, amt: req.body.amt, paid: false}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
         //res.send(result)
@@ -51,22 +51,44 @@ module.exports = function(app, passport, db) {
     })
 
     app.put('/list', (req, res) => {
-      db.collection('bill_info')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
-        $set: {
-          thumbUp:req.body.thumbUp + 1
-        }
-      }, {
-        sort: {_id: -1},
-        upsert: true
-      }, (err, result) => {
-        if (err) return res.send(err)
-        res.send(result)
-      })
+
+      if (req.body.paid === true){
+
+        db.collection('bill_info')
+        .findOneAndUpdate({name: req.user.local.email, company: req.body.company, date: req.body.date, amt: req.body.amt}, {
+          $set: {
+            paid: true
+          }
+        }, {
+          sort: {_id: -1},
+          upsert: true
+        }, (err, result) => {
+          if (err) return res.send(err)
+          // console.log(result)
+          res.send(result)
+        })
+
+        
+      }else {
+        db.collection('bill_info')
+        .findOneAndUpdate({name: req.user.local.email, company: req.body.company, date: req.body.date, amt: req.body.amt}, {
+          $set: {
+            paid: false
+          }
+        }, {
+          sort: {_id: -1},
+          upsert: true
+        }, (err, result) => {
+          if (err) return res.send(err)
+          // console.log(result)
+          res.send(result)
+        })
+    }
     })
+  
 
     app.delete('/list', (req, res) => {
-      db.collection('bill_info').findOneAndDelete({msg: req.body.msg}, (err, result) => {
+      db.collection('bill_info').findOneAndDelete({name: req.user.local.email, company: req.body.company, date: req.body.date, amt: req.body.amt}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })

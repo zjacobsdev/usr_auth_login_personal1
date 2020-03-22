@@ -11,16 +11,16 @@ body{
 }li{
   margin-bottom: 30px;
 }
-.dataSpan,th {
+/* .dataSpan {
   border: 1px solid black;
   padding: 10px 2% 10px 2%
-}
+} */
 .label{
   width: 40%;
 }
 .col-sm-6{
   width: 100%;
 }
-li span,th{
+li span {
   margin-left: 12.5%;
 }

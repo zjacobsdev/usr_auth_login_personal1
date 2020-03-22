@@ -47,10 +47,11 @@
           <% for(var i=0; i < data.length; i++) {%>
            <% if(data[i].name === user.local.email ) {%>
             <li class="message">
-              <span class ="dataSpan"><%= data[i].company %></span>
-              <span class ="dataSpan"><%= data[i].date %></span>
-              <span class ="dataSpan"><%= data[i].amt %></span>
-              <button class ="dataSpan">Paid</button> 
+              <span><%= data[i].company %></span>
+              <span><%= data[i].date %></span>
+              <span><%= data[i].amt %></span>
+              <button class ="paidBtn" type ="button">Paid</button> 
+              <button class ="trashBtn" type ="button">Trash</button> 
             </li>
             <% } %>
           <% } %>
