@@ -10,13 +10,13 @@
 <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <h1><span class="fa fa-anchor"></span> <%= user.local.email%>'s' Launch Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
-    <div class="row">
+    <!-- <div class="row">
 
-        <!-- LOCAL INFORMATION -->
+        LOCAL INFORMATION
         <div class="col-sm-6">
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
@@ -34,29 +34,37 @@
                 <% } %>
 
             </div>
-        </div>
+        </div> -->
         <div class="col-sm-6">
-          <h3>Messages</h3>
+          <h3>Upcoming Bills</h3>
+          
+              <span class="label">Company</span> 
+              <span class="label">Due Date</span>
+              <span class="label">Payment Amount</span>
+          
+    
           <ul class="messages">
-          <% for(var i=0; i<messages.length; i++) {%>
-           <% if(messages[i].name === user.local.email ) {%>
+          <% for(var i=0; i < data.length; i++) {%>
+           <% if(data[i].name === user.local.email ) {%>
             <li class="message">
-              <span><%= messages[i].name %></span>
-              <span><%= messages[i].msg %></span>
-              <span><%= messages[i].thumbUp %></span>
-              <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-              <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
-              <span><i class="fa fa-trash" aria-hidden="true"></i></span>
+              <span class ="dataSpan"><%= data[i].company %></span>
+              <span class ="dataSpan"><%= data[i].date %></span>
+              <span class ="dataSpan"><%= data[i].amt %></span>
+              <button class ="dataSpan">Paid</button> 
             </li>
             <% } %>
           <% } %>
           </ul>
 
-          <h2>Add a message</h2>
+          <h2>Enter new bills</h2>
         <% if (user.local.email) { %>
-          <form action="/messages" method="POST">
-            <input type="text" value="<%= user.local.email %>" name="name">
-            <input type="text" placeholder="message" name="msg">
+          <form action="/list" method="POST">
+            <label for="company"></label>
+            <input type="text" placeholder="Company Name" name="company">
+            <label for="date"></label>
+            <input type="text" placeholder="Due Date" name="date">
+            <label for="amt"></label>
+            <input type="text" placeholder="$200"  name ="amt">
             <button type="submit">Submit</button>
           </form>
         </div>

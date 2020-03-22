@@ -1,5 +1,5 @@
 module.exports = function(app, passport, db) {
-
+ // app.use(express.urlencoded())
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
@@ -11,13 +11,13 @@ module.exports = function(app, passport, db) {
     app.get('/profile', isLoggedIn, function(req, res) {
       if(req.user.local.email){
         //console.log(req.user.local)
-        db.collection('messages').find().toArray((err, result) => {
-          //console.log(result)
-          console.log(req)
+        db.collection('bill_info').find().toArray((err, result) => {
+          console.log(result)
+          // console.log(req)
           if (err) return console.log(err)
           res.render('profile.ejs', {
             user: req.user,
-            messages: result
+            data: result
           })
         })
       }
@@ -41,16 +41,17 @@ module.exports = function(app, passport, db) {
 
 // message board routes ===============================================================
 
-    app.post('/messages', (req, res) => {
-      db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+    app.post('/list', (req, res) => {
+      db.collection('bill_info').save({name:req.user.local.email,company: req.body.company, date: req.body.date, amt: req.body.amt}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
+        //res.send(result)
         res.redirect('/profile')
       })
     })
 
-    app.put('/messages', (req, res) => {
-      db.collection('messages')
+    app.put('/list', (req, res) => {
+      db.collection('bill_info')
       .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
         $set: {
           thumbUp:req.body.thumbUp + 1
@@ -64,8 +65,8 @@ module.exports = function(app, passport, db) {
       })
     })
 
-    app.delete('/messages', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+    app.delete('/list', (req, res) => {
+      db.collection('bill_info').findOneAndDelete({msg: req.body.msg}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })
